@@ -9,7 +9,8 @@ class Product extends Model
 {
     use HasFactory;
 
-    
+    //Tablonun adı products olduğu için tanımlamamıza gerek yok. Laravel otomatik olarak Product modelini products tablosuna bağlar.
+    // Formdan gelecek verilerle doldurulmasına izin verilen sütunlar
     protected $fillable = [
         'urun_adi', 'urun_aciklamasi', 'fiyati', 'marka', 
         'urun_grubu', 'cinsiyet', 'cerceve_rengi', 'cam_rengi', 

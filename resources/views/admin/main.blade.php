@@ -121,6 +121,16 @@
                         </ul>
                     </li>
                     <!--end::Color Mode Toggle-->
+                    <!--begin::Logout-->
+                    <li class="nav-item">
+                        <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="nav-link btn btn-link border-0" title="Güvenli Çıkış">
+                                <i class="bi bi-box-arrow-right text-danger fs-5"></i>
+                            </button>
+                        </form>
+                    </li>
+                    <!--end::Logout-->
                 </ul>
                 <!--end::End Navbar Links-->
             </div>
@@ -148,13 +158,15 @@
                         aria-label="Main navigation" data-accordion="false" id="navigation">
 
                         <li class="nav-item">
-                            <a href="{{ route('admin.urun.ekle') }}" class="nav-link {{ request()->routeIs('admin.urun.ekle') ? 'active' : '' }}">
+                            <a href="{{ route('admin.urun.ekle') }}"
+                                class="nav-link {{ request()->routeIs('admin.urun.ekle') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-plus-circle"></i>
                                 <p>Ürün ekle</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.urun.listesi') }}" class="nav-link {{ request()->routeIs('admin.urun.listesi') ? 'active' : '' }}">
+                            <a href="{{ route('admin.urun.listesi') }}"
+                                class="nav-link {{ request()->routeIs('admin.urun.listesi') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-list-ul"></i>
                                 <p>Ürün listesi</p>
                             </a>
@@ -168,7 +180,7 @@
         <!--end::Sidebar-->
 
         @yield('content')
-        
+
         <!--begin::Footer-->
         <footer class="app-footer">
             <!--begin::To the end-->

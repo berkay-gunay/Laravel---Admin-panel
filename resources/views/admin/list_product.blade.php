@@ -74,7 +74,7 @@
                                                         <span class="badge bg-secondary">{{ $urun->urun_grubu }}</span>
                                                     </td>
                                                     <td class="text-center">
-                                                        <a href="#" class="btn btn-sm btn-primary" title="Düzenle">
+                                                        <a href="{{ route('admin.urun.duzenle', $urun->id) }}" class="btn btn-sm btn-primary" title="Düzenle">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </a>
 

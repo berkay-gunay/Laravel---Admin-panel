@@ -17,8 +17,8 @@ class ProductController extends Controller
     public function list_products()
     {
         
-        $urunler = Product::orderBy('id', 'desc')->get(); 
-        
+        $urunler = Product::orderBy('id', 'desc')->get();
+
         
         return view('admin.list_product', compact('urunler'));
     }
@@ -28,18 +28,18 @@ class ProductController extends Controller
     {
         
         $urun = Product::findOrFail($id);
-        
+
         
         $urun->delete();
-        
+
         
         return redirect()->back()->with('success', 'Ürün başarıyla silindi!');
     }
 
-    // Formdan gelen verileri veritabanına kaydeder
+    
     public function store(Request $request)
     {
-        // Güvenlik: Validation
+        
         $validatedData = $request->validate([
             'urun_adi' => 'required|string|max:255',
             'marka' => 'required|string|max:255',
@@ -53,6 +53,7 @@ class ProductController extends Controller
             'sap_uzunlugu' => 'nullable|string',
             'kopru_uzunlugu' => 'nullable|string',
             'urun_aciklamasi' => 'nullable|string',
+            
             'degrade' => 'boolean',
             'urun_gorseli' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
@@ -60,7 +61,7 @@ class ProductController extends Controller
         
         $validatedData['degrade'] = $request->has('degrade') ? true : false;
 
-        // Resim yükleme
+        
         if ($request->hasFile('urun_gorseli')) {
             
             $yol = $request->file('urun_gorseli')->store('urun_gorselleri', 'public');
@@ -69,10 +70,63 @@ class ProductController extends Controller
             $validatedData['urun_gorseli'] = $yol;
         }
 
-        // Veritabanına yaz
+        
         Product::create($validatedData);
 
-        // Başarı mesajıyla formu tekrar aç
+        
         return redirect()->back()->with('success', 'Ürün başarıyla veritabanına kaydedildi!');
+    }
+
+    
+    
+    public function edit($id)
+    {
+        $urun = Product::findOrFail($id);
+
+        return view('admin.edit_product', compact('urun'));
+    }
+
+    
+    public function update(Request $request, $id)
+    {
+        $urun = Product::findOrFail($id);
+
+        
+        $request->validate([
+            'urun_adi' => 'required|max:255',
+            'marka' => 'required|max:255',
+            'fiyati' => 'required|numeric',
+            'urun_grubu' => 'required',
+            'urun_gorseli' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+        ]);
+
+        
+        if ($request->hasFile('urun_gorseli')) {
+            $imageName = time() . '.' . $request->urun_gorseli->extension();
+            $request->urun_gorseli->storeAs('public/urunler', $imageName);
+            $urun->urun_gorseli = $imageName; 
+        }
+
+        
+        $urun->urun_adi = $request->urun_adi;
+        $urun->marka = $request->marka;
+        $urun->fiyati = $request->fiyati;
+        $urun->urun_grubu = $request->urun_grubu;
+        $urun->cinsiyet = $request->cinsiyet;
+        $urun->cerceve_rengi = $request->cerceve_rengi;
+        $urun->cam_rengi = $request->cam_rengi;
+        $urun->cerceve_sekli = $request->cerceve_sekli;
+        $urun->ekartman = $request->ekartman;
+        $urun->sap_uzunlugu = $request->sap_uzunlugu;
+        $urun->kopru_uzunlugu = $request->kopru_uzunlugu;
+        $urun->urun_aciklamasi = $request->urun_aciklamasi;
+        
+        
+        $urun->degrade = $request->has('degrade') ? 1 : 0;
+
+        
+        $urun->save();
+
+        return redirect()->route('admin.urun.listesi')->with('success', 'Ürün başarıyla güncellendi!');
     }
 }
